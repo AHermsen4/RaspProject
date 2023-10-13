@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <sshexec trust="true" password="TobyBoefie" port="22" host="alwinhpi.local" failonerror="false" command="mkdir --parents /home/alwin/hw_on_pi" username="alwin" verbose="true"/>
+  <scp trust="true" file="C:\Users\Alwin\OOP\Raspberry\DS1820_API_Alwin\target/Simple_DS1820_API-1.0-jar-with-dependencies.jar" todir="alwin:TobyBoefie@alwinhpi.local:/home/alwin/hw_on_pi" port="22" failonerror="true" verbose="true"></scp>
+</target>
+</project>

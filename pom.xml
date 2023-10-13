@@ -38,11 +38,6 @@
 			<artifactId>pi4j-device</artifactId>
 			<version>1.2</version>
 		</dependency>
-		<dependency>
-			<groupId>org.iot_lab.javaio</groupId>
-			<artifactId>BlinkLED</artifactId>
-			<version>1.0</version>
-		</dependency>
 	</dependencies>
 
 	<build>

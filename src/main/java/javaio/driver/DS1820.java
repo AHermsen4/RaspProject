@@ -92,7 +92,7 @@ public class DS1820
 		double lastValue = 0;
 		try {
             // URL of the endpoint
-            URL url = new URL("http://LAPTOP-BOTB5QRH:8000/api/temperatures"); // Replace with your actual URL
+            URL url = new URL("http://10.9.25.39:8000/api/temperatures"); // Replace with your actual URL
 
             // Open connection
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -140,7 +140,7 @@ public class DS1820
 			}
 			
 			apiSetTemp(value);
-
+			turnOnFan();
 
 			return value;
 		}
