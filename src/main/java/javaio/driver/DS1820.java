@@ -52,7 +52,7 @@ public class DS1820
 	public void apiSetTemp(double temp)
 	{
 		try {
-		URL url = new URL("http://127.0.0.1:8000/api/temperatures?value=" + temp);
+		URL url = new URL("http://10.9.25.39/api/temperatures?value=" + temp);
 		URLConnection con = url.openConnection();
 		HttpURLConnection http = (HttpURLConnection)con;
 		http.setRequestMethod("POST");
@@ -66,7 +66,7 @@ public class DS1820
 	public double apiGetLastTemp()
 	{
 		try {
-		URL apiUrl = new URL("http://127.0.0.1:8000/api/lastTemp");
+		URL apiUrl = new URL("http://10.9.25.39:8000/api/lastTemp");
 
         // Open connection
         HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
@@ -148,6 +148,12 @@ public class DS1820
 		public void turnOnFan()
 		{
 			fanPin.high();
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			gpio.shutdown();
 		}
 		
 		public void turnOffFan()
