@@ -1,0 +1,114 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.iot_lab.javaio</groupId>
+  <artifactId>Simple_DS1820_API</artifactId>
+  <version>1.0</version>
+    <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+		<!-- DEFAULT test PI PROPERTIES-->
+		<!-- change hostname, username and password -->
+		<pi.host>kbepi.local</pi.host>
+		<pi.port>22</pi.port>
+		<!-- username and password from maven ~/.m2/settings.xml file -->
+		<pi.user>${pi-user}</pi.user>
+		<!-- change password -->
+		<pi.password>${pi-password}</pi.password>
+		<pi.deployDirectory>/home/${pi.user}/hw_on_pi</pi.deployDirectory>
+		<pi.main.class>javaio.${project.artifactId}</pi.main.class>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.pi4j</groupId>
+			<artifactId>pi4j-core</artifactId>
+			<version>1.2</version>
+		</dependency>
+		
+		<dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
+        </dependency>
+
+		
+		<dependency>
+			<groupId>com.pi4j</groupId>
+			<artifactId>pi4j-device</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.iot_lab.javaio</groupId>
+			<artifactId>BlinkLED</artifactId>
+			<version>1.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+
+		<!-- goal: install to build and install it on the pi -->
+		<plugins>
+			<!-- This plugin will generate JAR MANIFEST file inside the JAR in order to make our applicationeasily runnable -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>${pi.main.class}</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-my-jar-with-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!--This plugin will Transfer the executable JAR file to the Pi and runs it -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>ant-execute</id>
+						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<!-- ensure the target directory exists on the Raspberry Pi -->
+								<sshexec host="${pi.host}" port="${pi.port}" username="${pi.user}" password="${pi.password}" trust="true" failonerror="false" verbose="true" command="mkdir --parents ${pi.deployDirectory}" />
+
+								<!-- copy the JAR file to the Raspberry Pi -->
+								<scp file="${project.build.directory}/${project.build.finalName}-jar-with-dependencies.jar" todir="${pi.user}:${pi.password}@${pi.host}:${pi.deployDirectory}" port="${pi.port}" trust="true" verbose="true" failonerror="true"></scp>
+
+								<!-- run the JAR file on the Raspberry Pi -->
+								<!-- <sshexec host="${pi.host}" port="${pi.port}" username="${pi.user}" password="${pi.password}" trust="true" failonerror="false" verbose="true" command="java -jar ${pi.deployDirectory}/${project.build.finalName}-jar-with-dependencies.jar" /> -->
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant-jsch</artifactId>
+						<version>1.10.8</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+  
+</project>
