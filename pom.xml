@@ -9,7 +9,7 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<!-- DEFAULT test PI PROPERTIES-->
 		<!-- change hostname, username and password -->
-		<pi.host>kbepi.local</pi.host>
+		<pi.host>alwinhpi.local</pi.host>
 		<pi.port>22</pi.port>
 		<!-- username and password from maven ~/.m2/settings.xml file -->
 		<pi.user>${pi-user}</pi.user>
